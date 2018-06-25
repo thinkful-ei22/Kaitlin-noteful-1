@@ -15,10 +15,18 @@ const app = express();
 
 app.use(express.static('public'));
 
-// GET LIST OF NOTES
+// GET LIST OF NOTES + FILTER
 
 app.get('/api/notes', (req, res) => {
-  res.json(data);
+  // res.json(data);
+  //   res.json(searchedItem);
+  let searchedItem = req.query.searchTerm;
+  if (searchedItem) {
+    let filterdList = data.filter(item => item.title.includes(searchedItem));
+    res.json(filterdList);
+  } else {
+    res.json(data);
+  }
 });
 
 // GET NOTE WITH SPECIFIC ID
