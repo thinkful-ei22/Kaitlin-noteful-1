@@ -23,6 +23,13 @@ app.get('/api/notes', (req, res) => {
 
 // GET NOTE WITH SPECIFIC ID
 
+app.get('/api/notes/:noteId', (req, res) => {
+  let foundItem = data.find(item => item.id === Number(req.params.noteId));
+  res.json(foundItem);
+});
+
+// *BEYONCE VOICE* LISTEN
+
 app.listen(8080, function () {
   console.info(`Server listening on ${this.address().port}`);
 }).on('error', err => {
