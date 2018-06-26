@@ -24,16 +24,15 @@ app.use(express.static('public'));
 
 // GET LIST OF NOTES + FILTER
 
-app.get('/api/notes', (req, res) => {
-  // res.json(data);
-  //   res.json(searchedItem);
-  let searchedItem = req.query.searchTerm;
-  if (searchedItem) {
-    let filterdList = data.filter(item => item.title.includes(searchedItem));
-    res.json(filterdList);
-  } else {
-    res.json(data);
-  }
+app.get('/api/notes', (req, res, next) => {
+  const { searchTerm } = req.query;
+  
+  notes.filter(searchTerm, (err, list) => {
+    if (err) {
+      return next(err); // goes to error handler
+    }
+    res.json(list); // responds with filtered array
+  });
 });
 
 // LOGGER
