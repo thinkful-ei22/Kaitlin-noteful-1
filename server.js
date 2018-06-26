@@ -4,6 +4,7 @@
 
 const { PORT } = require('./configure');
 const data = require('./db/notes');
+const logger = require('./middleware/logger');
 
 console.log('Hello Noteful!');
 
@@ -17,6 +18,7 @@ const app = express();
 // ADD STATIC SERVER HERE
 
 app.use(express.static('public'));
+app.use(logger);
 
 // GET LIST OF NOTES + FILTER
 
