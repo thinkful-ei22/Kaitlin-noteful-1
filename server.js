@@ -43,10 +43,15 @@ app.use(infoLogger);
 
 app.get('/api/notes/:noteId', (req, res, next) => {
   let foundItem = data.find(item => item.id === Number(req.params.noteId));
-  if (!foundItem) {
-    next();
-  }
-  res.json(foundItem);
+  //   if (!foundItem) {
+  //     next();
+  //   }
+  notes.find(foundItem, (err, item) => {
+    if (err) {
+      return next(err); // goes to error handler
+    }
+    res.json(item); // responds with item
+  });
 });
 
 // ERROR TESTING
