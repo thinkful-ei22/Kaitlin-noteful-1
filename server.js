@@ -4,7 +4,7 @@
 
 const { PORT } = require('./configure');
 const data = require('./db/notes');
-const logger = require('./middleware/logger');
+const infoLogger = require('./middleware/logger');
 
 console.log('Hello Noteful!');
 
@@ -18,7 +18,6 @@ const app = express();
 // ADD STATIC SERVER HERE
 
 app.use(express.static('public'));
-app.use(logger);
 
 // GET LIST OF NOTES + FILTER
 
@@ -34,14 +33,45 @@ app.get('/api/notes', (req, res) => {
   }
 });
 
+// LOGGER
+
+app.use(infoLogger);
+
 // GET NOTE WITH SPECIFIC ID
 
-app.get('/api/notes/:noteId', (req, res) => {
+app.get('/api/notes/:noteId', (req, res, next) => {
   let foundItem = data.find(item => item.id === Number(req.params.noteId));
+  if (!foundItem) {
+    next();
+  }
   res.json(foundItem);
 });
 
-// *BEYONCE VOICE* LISTEN
+// ERROR TESTING
+
+app.get('/boom', (req, res, next) => {
+  throw new Error('Boom!!');
+});
+
+// 404 ERROR
+
+app.use(function (req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  res.status(404).json({ message: 'Not Found' });
+});
+
+// CUSTOM ERROR
+
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    error: err
+  });
+});
+
+// LISTEN
 
 app.listen(PORT, function () {
   console.info(`Server listening on ${this.address().port}`);
