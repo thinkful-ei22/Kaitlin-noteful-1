@@ -41,16 +41,18 @@ app.use(infoLogger);
 
 // GET NOTE WITH SPECIFIC ID
 
-app.get('/api/notes/:noteId', (req, res, next) => {
-  let foundItem = data.find(item => item.id === Number(req.params.noteId));
-  //   if (!foundItem) {
-  //     next();
-  //   }
-  notes.find(foundItem, (err, item) => {
+app.get('/api/notes/:id', (req, res, next) => {
+  const id = req.params.id;
+  notes.find(id, (err, list) => {
     if (err) {
-      return next(err); // goes to error handler
+      return next(err);
     }
-    res.json(item); // responds with item
+    if (list) {
+      res.json(list);
+    }
+    else {
+      next();
+    }
   });
 });
 
