@@ -1,9 +1,12 @@
 'use strict';
 
 // Load array of notes
+
+const { PORT } = require('./configure');
 const data = require('./db/notes');
 
 console.log('Hello Noteful!');
+
 
 // INSERT EXPRESS APP CODE HERE...
 
@@ -38,7 +41,7 @@ app.get('/api/notes/:noteId', (req, res) => {
 
 // *BEYONCE VOICE* LISTEN
 
-app.listen(8080, function () {
+app.listen(PORT, function () {
   console.info(`Server listening on ${this.address().port}`);
 }).on('error', err => {
   console.error(err);
