@@ -61,3 +61,14 @@ notes.create (createObj, (err, item) => {
 });
 
 // DELETE
+  
+notes.delete(1010, (err, item) => {
+  if (err) {
+    console.error(err);
+  }
+  if (item) {
+    console.log('deleted: ', item);
+  } else {
+    console.log('not found');
+  }
+});
