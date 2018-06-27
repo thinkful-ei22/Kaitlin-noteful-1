@@ -15,10 +15,12 @@ console.log('Hello Noteful!');
 // INSERT EXPRESS APP CODE HERE...
 
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
 
 // LOGGER
 
+app.use(morgan('common'));
 app.use(infoLogger);
 
 // ADD STATIC SERVER HERE
