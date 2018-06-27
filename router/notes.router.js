@@ -94,7 +94,23 @@ notesRouter.post('/notes', (req, res, next) => {
     } else {
       next();
     }
-  })
+  });
+});
+
+// DELETE //
+
+notesRouter.delete('/notes/:id', (req, res, next) => {
+  if (req.params.id) {
+    notes.delete(req.params.id, (err) => {
+      if (err) {
+        res.status(err.status | 500).json({
+          message: err.message,
+          error: err
+        });
+      }
+      res.status(204).end();
+    });
+  }
 });
 
 module.exports = notesRouter;
