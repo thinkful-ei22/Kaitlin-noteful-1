@@ -20,29 +20,35 @@ const jsonParser = bodyParser.json();
 notesRouter.get('/notes', (req, res, next) => {
   const { searchTerm } = req.query;
     
-  notes.filter(searchTerm, (err, list) => {
-    if (err) {
-      return next(err); // goes to error handler
-    }
-    res.json(list); // responds with filtered array
-  });
+  notes.filter(searchTerm)
+    .then(list => {
+      if (list) {
+        res.json(list);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 // GET NOTE WITH SPECIFIC ID
 
 notesRouter.get('/notes/:id', (req, res, next) => {
   const id = req.params.id;
-  notes.find(id, (err, list) => {
-    if (err) {
-      return next(err);
-    }
-    if (list) {
-      res.json(list);
-    }
-    else {
-      next();
-    }
-  });
+
+  notes.find(id)
+    .then(item => {
+      if (item) {
+        res.json(item);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 // PUT (UPDATE) NOTE
@@ -60,16 +66,14 @@ notesRouter.put('/notes/:id', (req, res, next) => {
     }
   });
     
-  notes.update(id, updateObj, (err, item) => {
-    if (err) {
-      return next(err);
-    }
-    if (item) {
-      res.json(item);
-    } else {
-      next();
-    }
-  });
+  notes.update(id, updateObj)
+    .then(item => {
+      if (item) {
+        res.json(item);
+      } else {
+        next();
+      }
+    });
 });
 
 // POST ENDPOINT //
@@ -85,31 +89,35 @@ notesRouter.post('/notes', (req, res, next) => {
     return next(err);
   }
 
-  notes.create(newItem, (err, item) => {
-    if (err) {
-      return next(err);
-    }
-    if (item) {
-      res.location(`http://${req.headers.host}/notes/${item.id}`).status(210).json(item);
-    } else {
-      next();
-    }
-  });
+  notes.create(newItem)
+    .then(item => {
+      if (item) {
+        res.json(item);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 // DELETE //
 
 notesRouter.delete('/notes/:id', (req, res, next) => {
   if (req.params.id) {
-    notes.delete(req.params.id, (err) => {
-      if (err) {
-        res.status(err.status | 500).json({
-          message: err.message,
-          error: err
-        });
-      }
-      res.status(204).end();
-    });
+    
+    notes.delete(req.params.id)
+      .then(item => {
+        if (item) {
+          res.status(204).end();
+        } else {
+          next();
+        }
+      })
+      .catch(err => {
+        next(err);
+      });
   }
 });
 
