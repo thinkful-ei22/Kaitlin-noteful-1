@@ -4,10 +4,6 @@
 
 const { PORT } = require('./configure');
 const data = require('./db/notes');
-const simDB = require('./db/simDB');
-const notes = simDB.initialize(data);
-
-const infoLogger = require('./middleware/logger');
 
 console.log('Hello Noteful!');
 
@@ -22,7 +18,6 @@ const notesRouter = require('./router/notes.router');
 // LOGGER
 
 app.use(morgan('common'));
-app.use(infoLogger);
 
 // ADD STATIC SERVER HERE
 
@@ -62,8 +57,12 @@ app.use(function (err, req, res, next) {
 
 // LISTEN
 
-app.listen(PORT, function () {
-  console.info(`Server listening on ${this.address().port}`);
-}).on('error', err => {
-  console.error(err);
-});
+if (require.main === module) {
+  app.listen(PORT, function () {
+    console.info(`Server listening on ${this.address().port}`);
+  }).on('error', err => {
+    console.error(err);
+  });
+}
+
+module.exports = app;
