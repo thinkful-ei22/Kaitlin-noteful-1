@@ -75,30 +75,94 @@ describe('Noteful App', function () {
           expect(res).to.have.status(200);
           expect(res).to.be.json;
           expect(res.body).to.be.a('array');
-          expect(res.body).to.be.length(4);
+          expect(res.body).to.have.length(4);
           expect(res.body[0]).to.be.a('object');
         });
     });
   });
 
-// GET /api/notes/:id
+  it('should return an empty array for an incorrect search query', function() {
+    return chai
+      .request(app)
+      .get('/api/notes?searchTerm=Not%20a%20Valid%20Search')
+      .then(function(res) {
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.a('array');
+        expect(res.body).to.have.length(0);
+      });
+  });
 
-// should return correct note object with id, title and content for a given id
-// should respond with a 404 for an invalid id (/api/notes/DOESNOTEXIST)
+  // GET /api/notes/:id
 
-// describe('Return by ID', function() {
-//   it('should return an item by id', function() {
-//     return chai
-//       .request(app)
-//       const testObj = res.body[0];
-//       .get('api/notes/100')
-//       .then(function(res) {
-//         expect(res).to.have.status(200);
-//         const expectedKeys = ['id', 'title', 'content'];
-//         expect(res.body.note).to.include(expectedKeys);
+  // should return correct note object with id, title and content for a given id
+  // should respond with a 404 for an invalid id (/api/notes/DOESNOTEXIST)
 
-//       });
-//   });
-// });
+  describe('Return by ID', function() {
+    it('should return an item by id', function() {
+      return chai
+        .request(app)
+        .get('/api/notes/1000')
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.include.keys('id', 'title', 'content');
+
+        });
+    });
+
+    it('should return 404 for invalid id', function() {
+      return chai
+        .request(app)
+        .get('/api/notes/DOESNOTEXIST')
+        .catch(err => err.response)
+        .then(function(res) {
+          expect(res).to.have.status(404);
+        });
+    });
+  });
+
+  // POST /api/notes
+
+  // should create and return a new item with location header when provided valid data
+  // should return an object with a message property "Missing title in request body" when missing "title" field
+
+  describe('Post a new item', function() {
+    it('should create and return a new item w/ location header when provided valid data', function() {
+      const newItem = { 'title': 'another article about cats?',
+        'content': 'you betcha.' };
+      return chai
+        .request(app)
+        .post('/api/notes')
+        .send(newItem)
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body).to.include.keys('id', 'title', 'content');
+          expect(res.body.id).to.equal(1010);
+          expect(res.body.title).to.equal(newItem.title);
+          expect(res.body.content).to.equal(newItem.content);
+        });
+    });
+
+    it('should return an object with a message when missing "title" field', function() {
+      const badItem = { 'content': 'what about dogs?' };
+      return chai
+        .request(app)
+        .post('/api/notes')
+        .send(badItem)
+        .catch(err => err.response)
+        .then(function(res) {
+          // expect(res).to.have.status(400);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          // expect(res.body.message).to.equal('Missing title in request body');
+
+        });
+    });
+
+  });
+
+  
 
 });
