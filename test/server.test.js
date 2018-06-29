@@ -153,10 +153,10 @@ describe('Noteful App', function () {
         .send(badItem)
         .catch(err => err.response)
         .then(function(res) {
-          // expect(res).to.have.status(400);
+          expect(res).to.have.status(400);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          // expect(res.body.message).to.equal('Missing title in request body');
+          expect(res.body.message).to.equal('Missing `title` in request body.');
 
         });
     });
@@ -174,7 +174,7 @@ describe('Noteful App', function () {
       const updateItem = {'title': 'dogs are better!', 'content': 'hell yeah they are.'};
       return chai
         .request(app)
-        .put('/api/notes/1000')
+        .put('/api/notes/1001')
         .send(updateItem)
         .then(function(res) {
           expect(res).to.have.status(200);
@@ -186,9 +186,11 @@ describe('Noteful App', function () {
     });
 
     it('should respond with 404 for an invalid id', function() {
+      const updateItem = {'title': 'dogs are better!', 'content': 'hell yeah they are.'};
       return chai
         .request(app)
         .put('/api/notes/DOESNOTEXIST')
+        .send(updateItem)
         .catch(err => err.response)
         .then(function(res) {
           expect(res).to.have.status(404);
@@ -199,14 +201,14 @@ describe('Noteful App', function () {
       const badUpItem = {'content': 'hell yeah they are.'};
       return chai
         .request(app)
-        .put('/api/notes/1000')
+        .put('/api/notes/1001')
         .send(badUpItem)
         .catch(err => err.response)
         .then(function(res) {
-          // expect(res).to.have.status(200);
+          expect(res).to.have.status(400);
           expect(res).to.be.json;
           expect(res.body).to.be.a('object');
-          // expect(res.body.message).to.equal('Missing title in request body');
+          expect(res.body.message).to.equal('Missing `title` in request body.');
         });
     });
   });
@@ -219,7 +221,7 @@ describe('Noteful App', function () {
     it('should delete an item by the id', function() {
       return chai
         .request(app)
-        .delete('/api/notes/1000')
+        .delete('/api/notes/1001')
         .then(function(res) {
           expect(res).to.have.status(204);
         });
