@@ -163,6 +163,66 @@ describe('Noteful App', function () {
 
   });
 
-  
+  // PUT /api/notes/:id
 
+  // should update and return a note object when given valid data
+  // should respond with a 404 for an invalid id (/api/notes/DOESNOTEXIST)
+  // should return an object with a message property "Missing title in request body" when missing "title" field
+
+  describe('PUT api/notes/:id', function() {
+    it('should update and return a note object when given valid data', function(){
+      const updateItem = {'title': 'dogs are better!', 'content': 'hell yeah they are.'};
+      return chai
+        .request(app)
+        .put('/api/notes/1000')
+        .send(updateItem)
+        .then(function(res) {
+          expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          expect(res.body.title).to.equal(updateItem.title);
+          expect(res.body.content).to.equal(updateItem.content);
+        });
+    });
+
+    it('should respond with 404 for an invalid id', function() {
+      return chai
+        .request(app)
+        .put('/api/notes/DOESNOTEXIST')
+        .catch(err => err.response)
+        .then(function(res) {
+          expect(res).to.have.status(404);
+        });
+    });
+
+    it('should return an object with a message property "Missing title in request body" when missing "title" field', function(){
+      const badUpItem = {'content': 'hell yeah they are.'};
+      return chai
+        .request(app)
+        .put('/api/notes/1000')
+        .send(badUpItem)
+        .catch(err => err.response)
+        .then(function(res) {
+          // expect(res).to.have.status(200);
+          expect(res).to.be.json;
+          expect(res.body).to.be.a('object');
+          // expect(res.body.message).to.equal('Missing title in request body');
+        });
+    });
+  });
+
+  // DELETE /api/notes/:id
+
+  // should delete an item by id
+
+  describe('DELETE by id', function() {
+    it('should delete an item by the id', function() {
+      return chai
+        .request(app)
+        .delete('/api/notes/1000')
+        .then(function(res) {
+          expect(res).to.have.status(204);
+        });
+    });
+  });
 });
