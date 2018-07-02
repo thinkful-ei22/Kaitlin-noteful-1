@@ -2,7 +2,7 @@
 
 // Load array of notes
 
-const { PORT } = require('./configure');
+const { PORT } = require('./config');
 const data = require('./db/notes');
 
 console.log('Hello Noteful!');
