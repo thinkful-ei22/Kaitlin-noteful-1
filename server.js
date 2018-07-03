@@ -1,6 +1,6 @@
 'use strict';
 
-// Load array of notesss
+// Load array of notes
 
 const { PORT } = require('./config');
 const data = require('./db/notes');
