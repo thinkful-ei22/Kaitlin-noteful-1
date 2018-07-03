@@ -1,10 +1,2 @@
 language: node_js
-node_js:
-- node
-deploy:
-  provider: heroku
-  api_key:
-    secure: XTsabI4djX7WOtNCoD1mptvOcxiWEpH//19x4rn9NzNfaobu/QFRHmW+bfo6torHtpe9au42zFDX+copum02zqAlN/Huvs68/ht4zkhEONUZUuLCFW7rz5Wn1BKttGhwYB6XJWiWL11xPivYHOs9frutOfZcIHdcktDbfiUpq9T3gN7TctXdNCM2mkbA7U052B1jqHGHEA434ocFPVjTk8Cxp4zH7S+D8JKTKmYmUBpqbE2u3vIzbKZsAaKfzt92vqqHPciCMwNgHbvETzJH8xjteMedadTCr8bGdoV9rWd3Wx/l6e50Bm/KYv0UE3/+23/sLYb4B/2boAKjXQEdF3u9qT2ZrpTYbWsF5gsCyM2VoGgUdVd4MH3mi2RKi3/RnP4j5Fx49NnzijYe7ic5skaXPpQAKfd0c4yyTwRUq/+2wWbez5oG9ePIkUR/JaqXeLf9uv9xhHDzLh3TB4pt3YxiumuThZHXCOMiEdh6Z2eOGiYEdMPgmH0KJ6hOTYPakhjfsQ6+OnBOMGfwCkFye/CrkK0nmxlq+KkO1KSVRBN2+LwRT4PWTOzwMJWiW4+ajgRFFEaC4AOq2OtPnm40aLpYLoXjN+iFR/+cfmP320s9tgMzwYzI74sQtM4eUZK1a0T/QcVk/J8H9/NYoh17xZbIPluZRxrUJ/QSGILhgvY=
-  app: intense-dusk-82846
-  on:
-    repo: thinkful-ei22/Kaitlin-noteful-1
+node_js: node
